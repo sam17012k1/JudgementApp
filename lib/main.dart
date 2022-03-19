@@ -83,13 +83,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ButtonTheme(
-              minWidth: MediaQuery.of(context).size.width-40,
+              //minWidth: MediaQuery.of(context).size.width-40,
               child: ElevatedButton(
                   onPressed: () {
                     int value=int.parse(myController.text.toString().trim());
                     int value1=int.parse(myController1.text.toString().trim());
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => NamesScreen( value: value, value1: value1,)));
+                        MaterialPageRoute(builder: (context) => NamesScreen( numPlayers: value,)));
                   },
                   child: Text("Start game")),
             ),

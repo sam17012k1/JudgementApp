@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 
 class NamesScreen extends StatefulWidget {
   final int numPlayers;
-  const NamesScreen({Key? key, required this.numPlayers}) : super(key: key);
 
+  const NamesScreen({Key? key, required this.numPlayers}) : super(key: key);
   @override
   _NamesScreenState createState() => _NamesScreenState();
 }
 
 class _NamesScreenState extends State<NamesScreen> {
   late List controllers;
-  _NamesScreenState() {
+  @override
+  initState(){
+    super .initState();
     controllers = [];
     for (var i = 0; i < widget.numPlayers; i++) {
       controllers.insert(i, TextEditingController());
     }
+
   }
 
   @override
@@ -23,24 +26,31 @@ class _NamesScreenState extends State<NamesScreen> {
       appBar: AppBar(
         title: const Text("Player Names"),
       ),
-      body: Column(
-        children: [
-          ListView.builder(
-            itemCount: widget.numPlayers,
-            itemBuilder: (BuildContext context, int index) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text("Player" + index.toString()),
-                  TextFormField(
-                    controller: controllers[index],
-                  )
-                ],
-              );
-            },
-          ),
-        ],
-      ),
+      body:  Column(
+          children: [
+            Container(
+              height: 200,
+              child: ListView.builder(
+
+                shrinkWrap: true,
+                itemCount: widget.numPlayers,
+                itemBuilder: (BuildContext context, int index) {
+                  return Row(
+                    children: [
+                      Text("Player" + index.toString()),
+                      Expanded(
+                        child: TextFormField(
+                          controller: controllers[index],
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+
     );
   }
 }
