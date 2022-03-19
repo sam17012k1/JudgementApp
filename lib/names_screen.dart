@@ -11,8 +11,8 @@ class NamesScreen extends StatefulWidget {
 class _NamesScreenState extends State<NamesScreen> {
   late List controllers;
   @override
-  initState(){
-    super .initState();
+  initState() {
+    super.initState();
     print(widget.numPlayers);
     controllers = [];
     for (var i = 0; i < widget.numPlayers; i++) {
@@ -23,33 +23,36 @@ class _NamesScreenState extends State<NamesScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Player Names"),
       ),
-      body:  Column(
-          children: [
-
-               ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.numPlayers,
-                itemBuilder: (BuildContext context, int index) {
-                  return Row(
-                    children: [
-                      Text("Player" + index.toString()),
-                      Expanded(
-                        child: TextFormField(
-                          controller: controllers[index],
-                        ),
-                      )
-                    ],
-                  );
-                },
-
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(8),
+            itemCount: widget.numPlayers,
+            itemBuilder: (BuildContext context, int index) {
+              return Row(
+                children: [
+                  Text("Player " + (index + 1).toString()),
+                  Container(
+                    width: 10,
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                      controller: controllers[index],
+                    ),
+                  )
+                ],
+                mainAxisAlignment: MainAxisAlignment.start,
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
