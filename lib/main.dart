@@ -29,10 +29,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final myController = TextEditingController();
-  final myController1=TextEditingController();
+  final myController1 = TextEditingController();
 
   @override
-  void dispose(){
+  void dispose() {
     myController.dispose();
     super.dispose();
   }
@@ -75,21 +75,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontSize: 15,
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             TextField(
               controller: myController1,
               decoration: InputDecoration(
-                label: Text("Number of starting cards(max cards")
-              ),
+                  label: Text("Number of starting cards(max cards")),
             ),
             ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width-40,
               child: ElevatedButton(
                   onPressed: () {
-                    int value=int.parse(myController.text.toString().trim());
-                    int value1=int.parse(myController1.text.toString().trim());
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => NamesScreen( numPlayers: value,)));
+                    int value = int.parse(myController.text.toString().trim());
+                    int value1 =
+                        int.parse(myController1.text.toString().trim());
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NamesScreen(
+                                  numPlayers: value,
+                                )));
                   },
                   child: Text("Start game")),
             ),
