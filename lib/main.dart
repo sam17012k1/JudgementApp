@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertut/names_screen.dart';
+import 'package:fluttertut/players_singleton.dart';
 
 void main() {
   runApp(const MyApp());
@@ -88,14 +89,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ElevatedButton(
                   onPressed: () {
                     int value = int.parse(myController.text.toString().trim());
+                    PlayerSingletone().numPlayers = value;
                     int value1 =
                         int.parse(myController1.text.toString().trim());
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NamesScreen(
-                                  numPlayers: value,
-                                )));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => NamesScreen()));
                   },
                   child: Text("Start game")),
             ),

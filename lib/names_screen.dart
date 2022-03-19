@@ -1,11 +1,12 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertut/players_singleton.dart';
 
 class NamesScreen extends StatefulWidget {
-  final int numPlayers;
+  // final int numPlayers;
 
-  const NamesScreen({Key? key, required this.numPlayers}) : super(key: key);
+  const NamesScreen({Key? key}) : super(key: key);
   @override
   _NamesScreenState createState() => _NamesScreenState();
 }
@@ -15,11 +16,11 @@ class _NamesScreenState extends State<NamesScreen> {
   @override
   initState() {
     super.initState();
-    print(widget.numPlayers);
+    print(PlayerSingletone().numPlayers);
     controllers = [];
-    for (var i = 0; i < widget.numPlayers; i++) {
+    for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
       controllers.insert(i, TextEditingController());
-      print(i);
+      // print(i);
     }
   }
 
@@ -34,7 +35,7 @@ class _NamesScreenState extends State<NamesScreen> {
           ListView.builder(
             shrinkWrap: true,
             padding: const EdgeInsets.all(8),
-            itemCount: widget.numPlayers,
+            itemCount: PlayerSingletone().numPlayers,
             itemBuilder: (BuildContext context, int index) {
               return Row(
                 children: [
@@ -56,10 +57,11 @@ class _NamesScreenState extends State<NamesScreen> {
           ButtonTheme(
               child: ElevatedButton(
             onPressed: () {
-              List names = [];
-              for (var i = 0; i < widget.numPlayers; i++) {
+              List<String> names = [];
+              for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
                 names.insert(i, controllers[i].text.toString().trim());
               }
+              PlayerSingletone().playerNames = names;
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
                   return Container();
