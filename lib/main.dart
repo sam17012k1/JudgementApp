@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -29,60 +28,74 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final myController = TextEditingController();
+  final myController1=TextEditingController();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void dispose(){
+    myController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
-        title: Text("Judgement Scorer",style: TextStyle(color: Colors.black),),
+        title: Text(
+          "Judgement Scorer",
+          style: TextStyle(color: Colors.black),
+        ),
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
+              padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: Colors.yellow,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: TextFormField(
+              child: TextField(
+                controller: myController,
                 decoration: InputDecoration(
                   hintText: "Number of Players",
                 ),
               ),
             ),
-            SizedBox(height: 10,),
-            ElevatedButton(onPressed: ()
-    {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> NamesScreen()));
-    },
-             child: Text("Go to next Screen")),
-
-            const Text(
-              'You have pushed the button this many times:',
+            SizedBox(
+              height: 10,
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              "Starting Cards",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+              ),
+            ),
+            SizedBox(height: 10,),
+            TextField(
+              controller: myController1,
+              decoration: InputDecoration(
+                label: Text("Number of starting cards(max cards")
+              ),
+            ),
+            ButtonTheme(
+              minWidth: MediaQuery.of(context).size.width-40,
+              child: ElevatedButton(
+                  onPressed: () {
+                    int value=int.parse(myController.text.toString().trim());
+                    int value1=int.parse(myController1.text.toString().trim());
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => NamesScreen( value: value, value1: value1,)));
+                  },
+                  child: Text("Start game")),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
