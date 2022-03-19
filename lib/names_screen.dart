@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 class NamesScreen extends StatefulWidget {
@@ -51,6 +53,21 @@ class _NamesScreenState extends State<NamesScreen> {
               );
             },
           ),
+          ButtonTheme(
+              child: ElevatedButton(
+            onPressed: () {
+              List names = [];
+              for (var i = 0; i < widget.numPlayers; i++) {
+                names.insert(i, controllers[i].text.toString().trim());
+              }
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return Container();
+                },
+              ));
+            },
+            child: const Text("Start Round"),
+          ))
         ],
       ),
     );
