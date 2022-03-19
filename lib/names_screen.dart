@@ -13,25 +13,25 @@ class _NamesScreenState extends State<NamesScreen> {
   @override
   initState(){
     super .initState();
+    print(widget.numPlayers);
     controllers = [];
     for (var i = 0; i < widget.numPlayers; i++) {
       controllers.insert(i, TextEditingController());
+      print(i);
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Player Names"),
       ),
       body:  Column(
           children: [
-            Container(
-              height: 200,
-              child: ListView.builder(
 
+               ListView.builder(
                 shrinkWrap: true,
                 itemCount: widget.numPlayers,
                 itemBuilder: (BuildContext context, int index) {
@@ -46,11 +46,10 @@ class _NamesScreenState extends State<NamesScreen> {
                     ],
                   );
                 },
-              ),
+
             ),
           ],
         ),
-
     );
   }
 }
