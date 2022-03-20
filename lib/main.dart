@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertut/game_singletone.dart';
 import 'package:fluttertut/names_screen.dart';
 import 'package:fluttertut/players_singleton.dart';
 
@@ -42,47 +43,51 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Judgement Scorer",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: Colors.yellow,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: TextField(
                 controller: myController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "Number of Players",
                 ),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               "Starting Cards",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextField(
               controller: myController1,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   label: Text("Number of starting cards(max cards")),
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.number,
             ),
             ButtonTheme(
               //minWidth: MediaQuery.of(context).size.width-40,
@@ -92,10 +97,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     PlayerSingletone().numPlayers = value;
                     int value1 =
                         int.parse(myController1.text.toString().trim());
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => NamesScreen()));
+                    GameSingletone().maxCards = value1;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NamesScreen()));
                   },
-                  child: Text("Start game")),
+                  child: const Text("Start game")),
             ),
           ],
         ),
