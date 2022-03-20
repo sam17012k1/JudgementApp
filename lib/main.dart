@@ -85,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
             TextField(
               controller: myController1,
               decoration: const InputDecoration(
-                  label: Text("Number of starting cards(max cards")),
+                  label: Text("Number of starting cards(max cards)")),
               textInputAction: TextInputAction.done,
               keyboardType: TextInputType.number,
             ),
