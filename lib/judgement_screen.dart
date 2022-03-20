@@ -22,7 +22,11 @@ class _JudgementScreenState extends State<JudgementScreen> {
     for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
       _controllers.insert(i, TextEditingController());
       _rows.add(TableRow(children: [
-        Text(PlayerSingletone().playerNames[i]),
+        Text(
+          PlayerSingletone().playerNames[i],
+          textAlign: TextAlign.center,
+        ),
+        Container(),
         TextFormField(
           controller: _controllers[i],
           textInputAction: TextInputAction.next,
@@ -37,33 +41,36 @@ class _JudgementScreenState extends State<JudgementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: <Widget>[
-          Table(
-            columnWidths: const <int, TableColumnWidth>{
-              0: FractionColumnWidth(0.75),
-              1: FractionColumnWidth(0.25),
-            },
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            children: _rows,
-          ),
-          ButtonTheme(
-              child: ElevatedButton(
-            onPressed: () {
-              for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
-                _playerChoices[i] =
-                    int.parse(_controllers[i].text.toString().trim());
-              }
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        RoundScreen(playerChoices: _playerChoices),
-                  ));
-            },
-            child: const Text("Start Round"),
-          ))
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Table(
+              columnWidths: const <int, TableColumnWidth>{
+                0: FractionColumnWidth(0.5),
+                1: FractionColumnWidth(0.25),
+                2: FractionColumnWidth(0.25)
+              },
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: _rows,
+            ),
+            ButtonTheme(
+                child: ElevatedButton(
+              onPressed: () {
+                for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
+                  _playerChoices[i] =
+                      int.parse(_controllers[i].text.toString().trim());
+                }
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          RoundScreen(playerChoices: _playerChoices),
+                    ));
+              },
+              child: const Text("Start Game"),
+            ))
+          ],
+        ),
       ),
     );
   }

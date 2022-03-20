@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertut/game_singletone.dart';
 import 'package:fluttertut/players_singleton.dart';
+import 'package:fluttertut/score_screen.dart';
 
 class RoundScreen extends StatefulWidget {
   // final int numPlayers;
@@ -24,8 +25,14 @@ class _RoundScreenState extends State<RoundScreen> {
     for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
       _controllers.insert(i, TextEditingController());
       _rows.add(TableRow(children: [
-        Text(PlayerSingletone().playerNames[i]),
-        Text(widget.playerChoices[i].toString()),
+        Text(
+          PlayerSingletone().playerNames[i],
+          textAlign: TextAlign.center,
+        ),
+        Text(
+          widget.playerChoices[i].toString(),
+          textAlign: TextAlign.center,
+        ),
         TextFormField(
           controller: _controllers[i],
           textInputAction: TextInputAction.next,
@@ -42,34 +49,42 @@ class _RoundScreenState extends State<RoundScreen> {
       appBar: AppBar(
         title: const Text("Round Scores"),
       ),
-      body: Column(
-        children: [
-          Table(
-            columnWidths: const <int, TableColumnWidth>{
-              0: FractionColumnWidth(0.75),
-              1: FractionColumnWidth(0.125),
-              2: FractionColumnWidth(0.125),
-            },
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            children: _rows,
-          ),
-          ButtonTheme(
-              child: ElevatedButton(
-            onPressed: () {
-              for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
-                _playerScores
-                    .add(int.parse(_controllers[i].text.toString().trim()));
-              }
-              GameSingletone().scoreData.add(_playerScores);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Container(),
-                  ));
-            },
-            child: const Text("Start Round"),
-          ))
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Table(
+              columnWidths: const <int, TableColumnWidth>{
+                0: FractionColumnWidth(0.5),
+                1: FractionColumnWidth(0.25),
+                2: FractionColumnWidth(0.25),
+              },
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: _rows,
+            ),
+            ButtonTheme(
+                child: ElevatedButton(
+              onPressed: () {
+                for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
+                  _playerScores[i] =
+                      (int.parse(_controllers[i].text.toString().trim()));
+                  int dif = (widget.playerChoices[i] - _playerScores[i]).abs();
+                  if (dif == 0) {
+                    _playerScores[i] = 10 + _playerScores[i];
+                  } else {
+                    _playerScores[i] = -dif;
+                  }
+                }
+                GameSingletone().addScoreData(_playerScores);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ScoreScreen(),
+                    ));
+              },
+              child: const Text("See results"),
+            ))
+          ],
+        ),
       ),
       // body: SingleChildScrollView(
       //   child: Column(
