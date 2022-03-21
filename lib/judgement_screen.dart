@@ -60,7 +60,7 @@ class _JudgementScreenState extends State<JudgementScreen> {
                   _playerChoices[i] =
                       int.parse(_controllers[i].text.toString().trim());
                 }
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>

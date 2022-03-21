@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     int value1 =
                         int.parse(myController1.text.toString().trim());
                     GameSingletone().maxCards = value1;
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const NamesScreen()));

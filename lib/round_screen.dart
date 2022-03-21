@@ -75,7 +75,7 @@ class _RoundScreenState extends State<RoundScreen> {
                   }
                 }
                 GameSingletone().addScoreData(_playerScores);
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const ScoreScreen(),

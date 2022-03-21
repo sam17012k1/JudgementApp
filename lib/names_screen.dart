@@ -68,7 +68,7 @@ class _NamesScreenState extends State<NamesScreen> {
                   names.insert(i, controllers[i].text.toString().trim());
                 }
                 PlayerSingletone().playerNames = names;
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const JudgementScreen(),

@@ -39,7 +39,7 @@ class ScoreScreen extends StatelessWidget {
       rows.add(TableRow(children: tempRow));
     }
     tempRow = [];
-    tempRow.add(const Text(""));
+    tempRow.add(const Text("Total"));
     for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
       tempRow.add(Text(
         totalScores[i].toString(),
@@ -62,7 +62,7 @@ class ScoreScreen extends StatelessWidget {
             ButtonTheme(
                 child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const JudgementScreen()));
