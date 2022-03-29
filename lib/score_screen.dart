@@ -9,16 +9,22 @@ class ScoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<TableRow> rows = [];
-    List<Text> tempRow = [
-      const Text(
-        "Round",
-        textAlign: TextAlign.center,
+    List<Widget> tempRow = [
+      Container(
+        padding: const EdgeInsets.all(3),
+        child: const Text(
+          "Round",
+          textAlign: TextAlign.center,
+        ),
       )
     ];
     for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
-      tempRow.add(Text(
-        PlayerSingletone().playerNames[i],
-        textAlign: TextAlign.center,
+      tempRow.add(Container(
+        padding: const EdgeInsets.all(3),
+        child: Text(
+          PlayerSingletone().playerNames[i],
+          textAlign: TextAlign.center,
+        ),
       ));
     }
     rows.add(TableRow(children: tempRow));
@@ -26,24 +32,39 @@ class ScoreScreen extends StatelessWidget {
     List<int> totalScores = GameSingletone().getTotalScoreData();
     for (var i = 0; i < GameSingletone().numRounds; i++) {
       tempRow = [];
-      tempRow.add(Text(
-        (i + 1).toString(),
-        textAlign: TextAlign.center,
+      tempRow.add(Container(
+        padding: const EdgeInsets.all(3),
+        child: Text(
+          (i + 1).toString(),
+          textAlign: TextAlign.center,
+        ),
       ));
       for (var j = 0; j < PlayerSingletone().numPlayers; j++) {
-        tempRow.add(Text(
-          scores[i][j].toString(),
-          textAlign: TextAlign.center,
+        tempRow.add(Container(
+          padding: const EdgeInsets.all(3),
+          child: Text(
+            scores[i][j].toString(),
+            textAlign: TextAlign.center,
+          ),
         ));
       }
       rows.add(TableRow(children: tempRow));
     }
     tempRow = [];
-    tempRow.add(const Text("Total"));
-    for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
-      tempRow.add(Text(
-        totalScores[i].toString(),
+    tempRow.add(Container(
+      padding: const EdgeInsets.all(3),
+      child: const Text(
+        "Total",
         textAlign: TextAlign.center,
+      ),
+    ));
+    for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
+      tempRow.add(Container(
+        padding: const EdgeInsets.all(3),
+        child: Text(
+          totalScores[i].toString(),
+          textAlign: TextAlign.center,
+        ),
       ));
     }
     rows.add(TableRow(children: tempRow));
@@ -54,6 +75,9 @@ class ScoreScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Container(
+              padding: const EdgeInsets.all(5),
+            ),
             Table(
               defaultColumnWidth: const FlexColumnWidth(),
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
