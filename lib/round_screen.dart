@@ -16,12 +16,13 @@ class _RoundScreenState extends State<RoundScreen> {
   late List<TextEditingController> _controllers;
   late List<int> _playerScores;
   late List<TableRow> _rows;
+  final GlobalKey<FormState> _formkey = GlobalKey();
   @override
   void initState() {
     super.initState();
+    _playerScores = [];
     _controllers = [];
     _rows = [];
-    _playerScores = [];
     for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
       _controllers.insert(i, TextEditingController());
       _rows.add(TableRow(children: [
@@ -33,15 +34,33 @@ class _RoundScreenState extends State<RoundScreen> {
           widget.playerChoices[i].toString(),
           textAlign: TextAlign.center,
         ),
-        TextFormField(
-          controller: _controllers[i],
-          textInputAction: TextInputAction.next,
-          keyboardType: TextInputType.number,
+        Container(
+          child: TextFormField(
+            controller: _controllers[i],
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.number,
+            validator: validScores,
+            textAlign: TextAlign.center,
+          ),
+          padding: const EdgeInsets.all(15.0),
         )
       ]));
       _playerScores.add(0);
     }
   }
+
+  String? validScores(String? scoreString) {
+    if (scoreString == null) {
+      return "Enter Valid Number";
+    }
+    int? score = int.tryParse(scoreString);
+    if (score == null) {
+      return "Enter Valid Number";
+    }
+    return null;
+  }
+
+  bool scoresCorrect = true;
 
   @override
   Widget build(BuildContext context) {
@@ -50,71 +69,74 @@ class _RoundScreenState extends State<RoundScreen> {
         title: const Text("Round Scores"),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Table(
-              columnWidths: const <int, TableColumnWidth>{
-                0: FractionColumnWidth(0.5),
-                1: FractionColumnWidth(0.25),
-                2: FractionColumnWidth(0.25),
-              },
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              children: _rows,
-            ),
-            ButtonTheme(
-                child: ElevatedButton(
-              onPressed: () {
-                for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
-                  _playerScores[i] =
-                      (int.parse(_controllers[i].text.toString().trim()));
-                  int dif = (widget.playerChoices[i] - _playerScores[i]).abs();
-                  if (dif == 0) {
-                    _playerScores[i] = 10 + _playerScores[i];
-                  } else {
-                    _playerScores[i] = -dif;
+        child: Form(
+          key: _formkey,
+          child: Column(
+            children: [
+              Table(
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FractionColumnWidth(0.5),
+                  1: FractionColumnWidth(0.25),
+                  2: FractionColumnWidth(0.25),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: _rows,
+              ),
+              Container(
+                  child: Text("Cards Distributed : " +
+                      GameSingletone().maxCards.toString()),
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(5.0))),
+              ButtonTheme(
+                  child: ElevatedButton(
+                onPressed: () {
+                  if (_formkey.currentState!.validate()) {
+                    int totalScore = 0;
+                    for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
+                      _playerScores[i] =
+                          (int.parse(_controllers[i].text.toString().trim()));
+                      totalScore += _playerScores[i];
+                      int dif =
+                          (widget.playerChoices[i] - _playerScores[i]).abs();
+                      if (dif == 0) {
+                        _playerScores[i] = 10 + _playerScores[i];
+                      } else {
+                        _playerScores[i] = -dif;
+                      }
+                    }
+                    if (totalScore != GameSingletone().maxCards) {
+                      setState(() {
+                        scoresCorrect = false;
+                        _formkey.currentState!.save();
+                      });
+                      return;
+                    }
+                    GameSingletone().addScoreData(_playerScores);
+                    GameSingletone().maxCards -= 1;
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ScoreScreen(),
+                        ));
                   }
-                }
-                GameSingletone().addScoreData(_playerScores);
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ScoreScreen(),
-                    ));
-              },
-              child: const Text("See results"),
-            ))
-          ],
+                },
+                child: const Text("See results"),
+              )),
+              scoresCorrect
+                  ? Container()
+                  : Text(
+                      "Sum of scores should be " +
+                          GameSingletone().maxCards.toString(),
+                      style: const TextStyle(
+                        color: Colors.red,
+                      ),
+                    )
+            ],
+          ),
         ),
       ),
-      // body: SingleChildScrollView(
-      //   child: Column(
-      //     children: [
-      //       ListView.builder(
-      //         physics: const NeverScrollableScrollPhysics(),
-      //         shrinkWrap: true,
-      //         padding: const EdgeInsets.all(8),
-      //         itemCount: PlayerSingletone().numPlayers,
-      //         itemBuilder: (BuildContext context, int index) {
-      //           return Row(
-      //             mainAxisAlignment: MainAxisAlignment.start,
-      //             children: [
-      //               Text(PlayerSingletone().playerNames[index]),
-      //               Container(
-      //                 width: 10,
-      //               ),
-      //               Expanded(
-      //                 child: TextFormField(
-      //                   controller: _controllers[index],
-      //                   textInputAction: TextInputAction.next,
-      //                 ),
-      //               )
-      //             ],
-      //           );
-      //         },
-      //       )
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
