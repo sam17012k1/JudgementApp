@@ -9,8 +9,8 @@ class GameSingletone {
   }
 
   int maxCards = 8;
-  List<List<int>> _scoreData = [];
-  List<int> _totalScoreData = [];
+  final List<List<int>> _scoreData = [];
+  final List<int> _totalScoreData = [];
   int numRounds = 0;
   List<List<int>> getScoreData() {
     return _instance._scoreData;
