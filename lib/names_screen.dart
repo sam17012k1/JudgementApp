@@ -14,6 +14,7 @@ class NamesScreen extends StatefulWidget {
 
 class _NamesScreenState extends State<NamesScreen> {
   late List controllers;
+  final GlobalKey<FormState> _formkey = GlobalKey();
   @override
   initState() {
     super.initState();
@@ -25,6 +26,17 @@ class _NamesScreenState extends State<NamesScreen> {
     }
   }
 
+  String? validName(String? name) {
+    if (name == null) {
+      return "Enter a valid name";
+    }
+    name = name.trim();
+    if (name.isEmpty) {
+      return "Enter a valid name";
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,50 +45,57 @@ class _NamesScreenState extends State<NamesScreen> {
       ),
       body: SingleChildScrollView(
         // physics: AlwaysScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(8),
-              itemCount: PlayerSingletone().numPlayers,
-              itemBuilder: (BuildContext context, int index) {
-                return Row(
-                  children: [
-                    Text("Player " + (index + 1).toString()),
-                    Container(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        controller: controllers[index],
-                        textInputAction: (index < PlayerSingletone().numPlayers)
-                            ? TextInputAction.next
-                            : TextInputAction.done,
+        child: Form(
+          key: _formkey,
+          child: Column(
+            children: [
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(8),
+                itemCount: PlayerSingletone().numPlayers,
+                itemBuilder: (BuildContext context, int index) {
+                  return Row(
+                    children: [
+                      Text("Player " + (index + 1).toString()),
+                      Container(
+                        width: 10,
                       ),
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.start,
-                );
-              },
-            ),
-            ButtonTheme(
-                child: ElevatedButton(
-              onPressed: () {
-                List<String> names = [];
-                for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
-                  names.insert(i, controllers[i].text.toString().trim());
-                }
-                PlayerSingletone().playerNames = names;
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const JudgementScreen(),
-                    ));
-              },
-              child: const Text("Start Round"),
-            ))
-          ],
+                      Expanded(
+                        child: TextFormField(
+                          controller: controllers[index],
+                          validator: validName,
+                          textInputAction:
+                              (index < PlayerSingletone().numPlayers)
+                                  ? TextInputAction.next
+                                  : TextInputAction.done,
+                        ),
+                      )
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.start,
+                  );
+                },
+              ),
+              ButtonTheme(
+                  child: ElevatedButton(
+                onPressed: () {
+                  if (_formkey.currentState!.validate()) {
+                    List<String> names = [];
+                    for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
+                      names.insert(i, controllers[i].text.toString().trim());
+                    }
+                    PlayerSingletone().playerNames = names;
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const JudgementScreen(),
+                        ));
+                  }
+                },
+                child: const Text("Start Round"),
+              ))
+            ],
+          ),
         ),
       ),
     );
