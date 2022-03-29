@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertut/game_singletone.dart';
 import 'package:fluttertut/players_singleton.dart';
@@ -12,6 +14,9 @@ class JudgementScreen extends StatefulWidget {
 
 class _JudgementScreenState extends State<JudgementScreen> {
   late List<TextEditingController> _controllers;
+  late List<int> _playerChoices;
+  late List<TableRow> _rows;
+  final GlobalKey<FormState> _formkey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -19,26 +24,6 @@ class _JudgementScreenState extends State<JudgementScreen> {
     for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
       _controllers.insert(i, TextEditingController());
     }
-  }
-
-  bool roundScoreSumValid = true;
-
-  String? validRoundScore(String? scoreString) {
-    if (scoreString == null) {
-      return "Enter Valid Number";
-    }
-    int? score = int.tryParse(scoreString);
-    if (score == null) {
-      return "Enter Valid Number";
-    }
-    return null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    List<int> _playerChoices;
-    List<TableRow> _rows;
-    GlobalKey<FormState> _formkey = GlobalKey();
     _rows = [];
     _playerChoices = [];
     for (var i = 0; i < PlayerSingletone().numPlayers; i++) {
@@ -61,6 +46,23 @@ class _JudgementScreenState extends State<JudgementScreen> {
       ]));
       _playerChoices.add(0);
     }
+  }
+
+  bool roundScoreSumValid = true;
+
+  String? validRoundScore(String? scoreString) {
+    if (scoreString == null || scoreString.isEmpty) {
+      return "Enter Valid Number";
+    }
+    int? score = int.tryParse(scoreString);
+    if (score == null) {
+      return "Enter Valid Number";
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Judge Your cards"),
@@ -116,8 +118,11 @@ class _JudgementScreenState extends State<JudgementScreen> {
               )),
               roundScoreSumValid
                   ? Container()
-                  : Text("Sum of judgments should not be " +
-                      GameSingletone().maxCards.toString())
+                  : Text(
+                      "Sum of judgments should not be " +
+                          GameSingletone().maxCards.toString(),
+                      style: const TextStyle(color: Colors.red),
+                    )
             ],
           ),
         ),
