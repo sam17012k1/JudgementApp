@@ -30,13 +30,37 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final myController = TextEditingController();
-  final myController1 = TextEditingController();
+  final _myController = TextEditingController();
+  final _myController1 = TextEditingController();
+  final GlobalKey<FormState> _formkey = GlobalKey();
 
   @override
   void dispose() {
-    myController.dispose();
+    _myController.dispose();
     super.dispose();
+  }
+
+  String? validPlayerCount(String? count) {
+    if (count == null) {
+      return "Enter a number";
+    } else {
+      int? c = int.tryParse(count);
+      if (c == null) {
+        return "Enter a valid number";
+      }
+    }
+    return null;
+  }
+
+  String? validCardCount(String? count) {
+    if (count == null) {
+      return "Enter a number";
+    }
+    int? c = int.tryParse(count);
+    if (c == null) {
+      return "Enter a valid number";
+    }
+    return null;
   }
 
   @override
@@ -51,61 +75,69 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.yellow,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TextField(
-                controller: myController,
-                decoration: const InputDecoration(
-                  hintText: "Number of Players",
+        child: Form(
+          key: _formkey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.yellow,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                textInputAction: TextInputAction.next,
+                child: TextFormField(
+                  controller: _myController,
+                  decoration: const InputDecoration(
+                    hintText: "Number of Players",
+                  ),
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                  validator: validPlayerCount,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                "Starting Cards",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: _myController1,
+                decoration: const InputDecoration(
+                    label: Text("Number of starting cards(max cards)")),
+                textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.number,
+                validator: validCardCount,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Starting Cards",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
+              ButtonTheme(
+                //minWidth: MediaQuery.of(context).size.width-40,
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (_formkey.currentState!.validate()) {
+                        int value =
+                            int.parse(_myController.text.toString().trim());
+                        PlayerSingletone().numPlayers = value;
+                        int value1 =
+                            int.parse(_myController1.text.toString().trim());
+                        GameSingletone().maxCards = value1;
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const NamesScreen()));
+                      }
+                    },
+                    child: const Text("Start game")),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextField(
-              controller: myController1,
-              decoration: const InputDecoration(
-                  label: Text("Number of starting cards(max cards)")),
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.number,
-            ),
-            ButtonTheme(
-              //minWidth: MediaQuery.of(context).size.width-40,
-              child: ElevatedButton(
-                  onPressed: () {
-                    int value = int.parse(myController.text.toString().trim());
-                    PlayerSingletone().numPlayers = value;
-                    int value1 =
-                        int.parse(myController1.text.toString().trim());
-                    GameSingletone().maxCards = value1;
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NamesScreen()));
-                  },
-                  child: const Text("Start game")),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
