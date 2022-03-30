@@ -128,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         int value1 =
                             int.parse(_myController1.text.toString().trim());
                         GameSingletone().maxCards = value1;
+                        GameSingletone().gameCards = value1;
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

@@ -58,6 +58,9 @@ class _JudgementScreenState extends State<JudgementScreen> {
     if (score == null) {
       return "Enter Valid Number";
     }
+    if (score > GameSingletone().gameCards) {
+      return "Cannot enter more than number of game cards";
+    }
     return null;
   }
 
@@ -84,7 +87,7 @@ class _JudgementScreenState extends State<JudgementScreen> {
               ),
               Container(
                   child: Text("Cards Distributed : " +
-                      GameSingletone().maxCards.toString()),
+                      GameSingletone().gameCards.toString()),
                   padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                       border: Border.all(),
@@ -99,7 +102,7 @@ class _JudgementScreenState extends State<JudgementScreen> {
                           int.parse(_controllers[i].text.toString().trim());
                       judgmentSum += _playerChoices[i];
                     }
-                    if (judgmentSum == GameSingletone().maxCards) {
+                    if (judgmentSum == GameSingletone().gameCards) {
                       setState(() {
                         roundScoreSumValid = false;
                         _formkey.currentState!.save();
@@ -120,7 +123,7 @@ class _JudgementScreenState extends State<JudgementScreen> {
                   ? Container()
                   : Text(
                       "Sum of judgments should not be " +
-                          GameSingletone().maxCards.toString(),
+                          GameSingletone().gameCards.toString(),
                       style: const TextStyle(color: Colors.red),
                     )
             ],

@@ -57,6 +57,9 @@ class _RoundScreenState extends State<RoundScreen> {
     if (score == null) {
       return "Enter Valid Number";
     }
+    if (score > GameSingletone().gameCards) {
+      return "Cannot enter more than number of distributed cards";
+    }
     return null;
   }
 
@@ -84,7 +87,7 @@ class _RoundScreenState extends State<RoundScreen> {
               ),
               Container(
                   child: Text("Cards Distributed : " +
-                      GameSingletone().maxCards.toString()),
+                      GameSingletone().gameCards.toString()),
                   padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                       border: Border.all(),
@@ -106,7 +109,7 @@ class _RoundScreenState extends State<RoundScreen> {
                         _playerScores[i] = -dif;
                       }
                     }
-                    if (totalScore != GameSingletone().maxCards) {
+                    if (totalScore != GameSingletone().gameCards) {
                       setState(() {
                         scoresCorrect = false;
                         _formkey.currentState!.save();
@@ -114,7 +117,14 @@ class _RoundScreenState extends State<RoundScreen> {
                       return;
                     }
                     GameSingletone().addScoreData(_playerScores);
-                    GameSingletone().maxCards -= 1;
+                    if (GameSingletone().gameCards == 3) {
+                      GameSingletone().cardDirection = 1;
+                    } else if (GameSingletone().gameCards ==
+                        GameSingletone().maxCards) {
+                      GameSingletone().cardDirection = -1;
+                    }
+                    GameSingletone().gameCards +=
+                        GameSingletone().cardDirection;
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -128,7 +138,7 @@ class _RoundScreenState extends State<RoundScreen> {
                   ? Container()
                   : Text(
                       "Sum of scores should be " +
-                          GameSingletone().maxCards.toString(),
+                          GameSingletone().gameCards.toString(),
                       style: const TextStyle(
                         color: Colors.red,
                       ),
