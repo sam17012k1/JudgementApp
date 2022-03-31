@@ -57,8 +57,8 @@ class _RoundScreenState extends State<RoundScreen> {
     if (score == null) {
       return "Enter Valid Number";
     }
-    if (score > GameSingletone().gameCards) {
-      return "Cannot enter more than number of distributed cards";
+    if (score > GameSingletone().gameCards || score < 0) {
+      return "Enter number from valid range";
     }
     return null;
   }

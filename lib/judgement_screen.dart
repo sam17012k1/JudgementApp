@@ -58,8 +58,8 @@ class _JudgementScreenState extends State<JudgementScreen> {
     if (score == null) {
       return "Enter Valid Number";
     }
-    if (score > GameSingletone().gameCards) {
-      return "Cannot enter more than number of game cards";
+    if (score > GameSingletone().gameCards || score < 0) {
+      return "Enter number in valid range";
     }
     return null;
   }
